@@ -1,13 +1,23 @@
-sealed trait Expr
-case class Num(value: Int) extends Expr
-case class Sum(left: Expr, right: Expr) extends Expr
-case class Product(left: Expr, right: Expr) extends Expr
-case class Var(name: String) extends Expr
+trait Expression
+case class Constant(value: AnyVal) extends Expression
+case class Variable(name: String) extends Expression
 
-def eval(expr: Expr, vars: Map[String, Expr]): Int = expr match
-  case Num(value) =>
+trait Operator extends Expression
+case class Sum(left: Expression, right: Expression) extends Operator
+case class Product(left: Expression, right: Expression) extends Operator
+case class And(left: Expression, right: Expression) extends Operator
+case class Or(left: Expression, right: Expression) extends Operator
+
+trait Command
+case class Assign(variable: Variable, expression: Expression) extends Command
+case class Print(expression: Expression) extends Command
+
+
+
+def eval(expr: Expression, vars: Map[String, Expression]): Int = expr match
+  case Constant(value) =>
     value
-  case Var(name) =>
+  case Variable(name) =>
     eval(vars(name), vars)
   case Sum(left, right) =>
     eval(left, vars) + eval(right, vars)
@@ -15,7 +25,7 @@ def eval(expr: Expr, vars: Map[String, Expr]): Int = expr match
     eval(left, vars) * eval(right, vars)
 
 
-def main(args: Array[String]): Unit =
-  val expr = Product(Var("x"), Product(Num(1), Num(3)))
-  val vars = Map("x" -> Sum(Num(2), Num(3)))
+@main def main(): Unit =
+  val expr = Product(Variable("x"), Product(Constant(1), Constant(3)))
+  val vars = Map("x" -> Sum(Constant(2), Constant(3)))
   println(eval(expr, vars))

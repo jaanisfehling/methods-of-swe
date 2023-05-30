@@ -46,8 +46,8 @@ def execute(cmds: Seq[Command], state: State): State =
     }
 }
 
-@main def main() =
-  val state = State((0, 0), Direction.North)
-  val program = List(Forward(1), Left(), Forward(2))
-  val finalState = execute(program, state)
-  println(finalState.position(0))
+//@main def main() =
+//  val state = State((0, 0), Direction.North)
+//  val program = List(Forward(1), Left(), Forward(2))
+//  val finalState = execute(program, state)
+//  println(finalState.position(0))
