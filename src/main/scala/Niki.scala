@@ -1,6 +1,6 @@
 import scala.annotation.tailrec
 
-trait Command
+sealed trait Command
 case class Left() extends Command
 case class Right() extends Command
 case class Forward(number: Int) extends Command
